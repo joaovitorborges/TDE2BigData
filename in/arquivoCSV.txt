@@ -1,0 +1,7 @@
+Brazil;2016;01;sheep;exportação;1000;150;qnt_itens;100;vivos
+Japan;2016;01;sheep;importação;100;100;qnt_itens;200;vivos
+Brazil;2017;02;cow;importação;1000;100;qnt_itens;50;vivos
+Japan;2016;01;sheep;exportação;10;1000;qnt_itens;100;vivos
+Korea;2017;02;cow;exportação;1000;500;qnt_itens;20;vivos
+Brazil;2016;02;cow;importação;100;250;qnt_itens;50;vivos
+Brazil;2016;02;cow;importação;100;250;qnt_itens;500;vivos
