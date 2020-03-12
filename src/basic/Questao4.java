@@ -34,12 +34,12 @@ public class Questao4 {
 
         //cadastro das classes
         j.setJarByClass(Questao4.class);
-        j.setMapperClass(Mapper3.class);
-        j.setReducerClass(Reducer3.class);
+        j.setMapperClass(Mapper4.class);
+        j.setReducerClass(Reducer4.class);
 
         //definicao dos tipos
         j.setOutputKeyClass(Text.class);
-        j.setMapOutputValueClass(AuxQ3.class);
+        j.setMapOutputValueClass(AuxQ4.class);
 
         //definindo arquivos de entrada e saida
         FileInputFormat.addInputPath(j,input);
@@ -51,14 +51,13 @@ public class Questao4 {
     }
 
 
-
     //Classe MAP
     //1 parametro tipo da chave de entrada
     //2 parametro : tipo de valor de entrada
     //tipo de chave de saida
     //tipo de valor de saida
 
-    public static class Mapper3 extends Mapper<LongWritable, Text, Text, AuxQ3> {
+    public static class Mapper4 extends Mapper<LongWritable, Text, Text, AuxQ4> {
 
         // Funcao de map
         public void map(LongWritable key, Text value, Context con)
@@ -67,16 +66,16 @@ public class Questao4 {
             String linha = value.toString();
             String[] colunas = linha.split(";");      //divide cada linha em palavras
 
-            if (colunas[0].equals("Brazil") && colunas[1].equals("2016") && colunas[4].equals("importação")) {
-                AuxQ3 outputValue = new AuxQ3(colunas[2],Integer.parseInt(colunas[8]));   //cria valor
-                System.out.println("banana "+colunas[2]+colunas[8]);
-                con.write((new Text("mercadoria")), outputValue);
-            }
+
+            AuxQ4 outputValue = new AuxQ4(colunas[2],Float.parseFloat(colunas[6]));   //cria valor
+
+            con.write((new Text(colunas[1])), outputValue); // manda a chave e o valor
+
 
         }
     }
 
-    public static class Reducer3 extends Reducer<Text, AuxQ3, Text, IntWritable> {
+    public static class Reducer4 extends Reducer<Text, AuxQ4, Text, IntWritable> {
 
 
         //1 parametro tipo da chave de entrada (saida do map)
@@ -87,19 +86,18 @@ public class Questao4 {
         // Funcao de reduce
 
 
-        public void reduce(Text word, Iterable<AuxQ3> values, Context con)
+        public void reduce(Text word, Iterable<AuxQ4> values, Context con)
                 throws IOException, InterruptedException {
 
-            int val = 0;    // soma os valores
-            String commodity = "";
-            for (AuxQ3 w:values) {
-                if (w.getQnt() > val) {
-                    commodity = w.getMercadoria();
-                    val = w.getQnt();
-                }
+            float sum = 0;    // soma os valores
+
+            for (AuxQ4 w:values) {
+
+                sum += w.getPeso();
+
             }
 
-            con.write(new Text(commodity),new IntWritable(val)); // resultado final
+            con.write(word,new IntWritable(sum)); // resultado final
         }
     }
 

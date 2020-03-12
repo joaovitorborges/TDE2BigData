@@ -69,7 +69,7 @@ public class Questao3 {
 
             if (colunas[0].equals("Brazil") && colunas[1].equals("2016") && colunas[4].equals("importação")) {
                 AuxQ3 outputValue = new AuxQ3(colunas[2],Integer.parseInt(colunas[8]));   //cria valor
-                System.out.println("banana "+colunas[2]+colunas[8]);
+
                 con.write((new Text("mercadoria")), outputValue);
             }
 
