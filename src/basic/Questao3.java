@@ -39,7 +39,7 @@ public class Questao3 {
 
         //definicao dos tipos
         j.setOutputKeyClass(Text.class);
-        j.setMapOutputValueClass(AuxQ3.class);
+        j.setMapOutputValueClass(valorQ3.class);
 
         //definindo arquivos de entrada e saida
         FileInputFormat.addInputPath(j,input);
@@ -58,7 +58,7 @@ public class Questao3 {
     //tipo de chave de saida
     //tipo de valor de saida
 
-    public static class Mapper3 extends Mapper<LongWritable, Text, Text, AuxQ3> {
+    public static class Mapper3 extends Mapper<LongWritable, Text, Text, valorQ3> {
 
         // Funcao de map
         public void map(LongWritable key, Text value, Context con)
@@ -68,7 +68,7 @@ public class Questao3 {
             String[] colunas = linha.split(";");      //divide cada linha em palavras
 
             if (colunas[0].equals("Brazil") && colunas[1].equals("2016") && colunas[4].equals("importação")) {
-                AuxQ3 outputValue = new AuxQ3(colunas[2],Integer.parseInt(colunas[8]));   //cria valor
+                valorQ3 outputValue = new valorQ3(colunas[2],Integer.parseInt(colunas[8]));   //cria valor
 
                 con.write((new Text("mercadoria")), outputValue);
             }
@@ -76,7 +76,7 @@ public class Questao3 {
         }
     }
 
-    public static class Reducer3 extends Reducer<Text, AuxQ3, Text, IntWritable> {
+    public static class Reducer3 extends Reducer<Text, valorQ3, Text, IntWritable> {
 
 
         //1 parametro tipo da chave de entrada (saida do map)
@@ -87,12 +87,12 @@ public class Questao3 {
         // Funcao de reduce
 
 
-        public void reduce(Text word, Iterable<AuxQ3> values, Context con)
+        public void reduce(Text word, Iterable<valorQ3> values, Context con)
                 throws IOException, InterruptedException {
 
             int val = 0;    // soma os valores
             String commodity = "";
-            for (AuxQ3 w:values) {
+            for (valorQ3 w:values) {
                 if (w.getQnt() > val) {
                     commodity = w.getMercadoria();
                     val = w.getQnt();

@@ -1,6 +1,5 @@
 <component name="libraryTable">
-  <library name="org.apache.hadoop:hadoop-mapreduce-client-common:2.7.1" type="repository">
-    <properties maven-id="org.apache.hadoop:hadoop-mapreduce-client-common:2.7.1" />
+  <library name="org.apache.hadoop:hadoop-mapreduce-client-common:2.7.1">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/hadoop-mapreduce-client-common-2.7.1.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/hadoop-yarn-common-2.7.1.jar!/" />

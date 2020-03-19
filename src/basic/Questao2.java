@@ -35,6 +35,7 @@ public class Questao2 {
         //cadastro das classes
         j.setJarByClass(Questao2.class);
         j.setMapperClass(Mapper2.class);
+        j.setCombinerClass(Combine2.class);
         j.setReducerClass(Reducer2.class);
 
         //definicao dos tipos
@@ -72,6 +73,28 @@ public class Questao2 {
             con.write(outputkey, outputValue);
 
 
+        }
+    }
+
+
+    public static class Combine2 extends Reducer<Text, IntWritable, Text, IntWritable> {
+
+
+        //1 parametro tipo da chave de entrada (saida do map)
+        //2 parametro : tipo de valor de entrada (saida do map)
+        //tipo de chave de saida
+        //tipo de valor de saida
+
+        // Funcao de reduce
+        public void reduce(Text word, Iterable<IntWritable> values, Context con)
+                throws IOException, InterruptedException {
+
+            int sum = 0;    // soma os valores
+            for (IntWritable w:values) {
+                sum += w.get();
+            }
+
+            con.write(word,new IntWritable(sum)); // resultado final
         }
     }
 

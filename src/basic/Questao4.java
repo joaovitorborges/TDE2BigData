@@ -35,19 +35,21 @@ public class Questao4 {
         //cadastro das classes
         j.setJarByClass(Questao4.class);
         j.setMapperClass(Mapper4.class);
+        j.setReducerClass(Combine4.class);
         j.setReducerClass(Reducer4.class);
 
         //definicao dos tipos
-        j.setOutputKeyClass(Text.class);
-        j.setMapOutputValueClass(AuxQ4.class);
+        j.setOutputKeyClass(chaveQ4.class);
+        j.setMapOutputValueClass(valorQ4.class);
+
 
         //definindo arquivos de entrada e saida
         FileInputFormat.addInputPath(j,input);
         FileOutputFormat.setOutputPath(j,output);
 
-
         // lanca o job e aguarda sua execucao
         System.exit(j.waitForCompletion(true) ? 0 : 1);
+
     }
 
 
@@ -57,7 +59,7 @@ public class Questao4 {
     //tipo de chave de saida
     //tipo de valor de saida
 
-    public static class Mapper4 extends Mapper<LongWritable, Text, Text, AuxQ4> {
+    public static class Mapper4 extends Mapper<LongWritable, Text, chaveQ4, valorQ4> {
 
         // Funcao de map
         public void map(LongWritable key, Text value, Context con)
@@ -67,15 +69,38 @@ public class Questao4 {
             String[] colunas = linha.split(";");      //divide cada linha em palavras
 
 
-            AuxQ4 outputValue = new AuxQ4(colunas[2],Float.parseFloat(colunas[6]));   //cria valor
+            chaveQ4 outputKey = new chaveQ4(colunas[1],colunas[3]);   //cria valor
+            valorQ4 outputValue = new valorQ4(1,Float.parseFloat(colunas[6]));
 
-            con.write((new Text(colunas[1])), outputValue); // manda a chave e o valor
-
+            con.write(outputKey,outputValue); // manda a chave e o valor
 
         }
     }
 
-    public static class Reducer4 extends Reducer<Text, AuxQ4, Text, IntWritable> {
+
+    public static class Combine4 extends Reducer<chaveQ4, valorQ4, chaveQ4, valorQ4> {
+
+
+        public void reduce(chaveQ4 word, Iterable<valorQ4> values, Context con)
+                throws IOException, InterruptedException {
+
+            float peso = 0;    // soma os valores
+            float n = 0;
+            for (valorQ4 v:values) {
+                peso += v.getPeso();
+                n += v.getN();
+            }
+
+            peso = peso/n;
+
+            valorQ4 outputValue2 = new valorQ4((int) n,peso);
+
+            con.write(word,outputValue2); // resultado final
+        }
+    }
+
+
+    public static class Reducer4 extends Reducer<chaveQ4, valorQ4, Text, Text> {
 
 
         //1 parametro tipo da chave de entrada (saida do map)
@@ -86,18 +111,22 @@ public class Questao4 {
         // Funcao de reduce
 
 
-        public void reduce(Text word, Iterable<AuxQ4> values, Context con)
+        public void reduce(chaveQ4 word, Iterable<valorQ4> values, Context con)
                 throws IOException, InterruptedException {
 
-            float sum = 0;    // soma os valores
-
-            for (AuxQ4 w:values) {
-
-                sum += w.getPeso();
-
+            System.out.println("chave");
+            System.out.println(word.ano);
+            System.out.println(word.mercadoria);
+            float peso = 0;    // soma os valores
+            float n = 0;
+            for (valorQ4 v:values) {
+                peso += v.getPeso();
+                n += v.getN();
             }
 
-            con.write(word,new IntWritable(sum)); // resultado final
+            peso = peso/n;
+
+            con.write(new Text(word.getAno()+ " " + word.getMercadoria()),new Text(String.valueOf(peso))); // resultado final
         }
     }
 

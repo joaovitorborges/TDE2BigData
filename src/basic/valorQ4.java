@@ -6,21 +6,19 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class AuxQ4 implements Writable {
+public class valorQ4 implements Writable {
     int n; // passamos n como 1 sempre para ajudar o reduce no processamento
     float peso;// passamos o peso
 
-    public AuxQ4(){
+    public valorQ4(){
     }
 
-    public AuxQ4(String n, float peso) {
+    public valorQ4(int n, float peso) {
         this.n = n;
         this.peso = peso;
     }
 
-    public String getN() {
-        return n;
-    }
+    public int getN() { return n; }
 
     public float getPeso() {
         return peso;
@@ -28,9 +26,8 @@ public class AuxQ4 implements Writable {
 
     @Override
     public void readFields(DataInput in) throws IOException {
-        n = in.readUTF();
+        n = Integer.parseInt(in.readUTF());
         peso = Float.parseFloat(in.readUTF());
-
     }
 
     @Override

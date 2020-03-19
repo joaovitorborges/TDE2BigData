@@ -6,14 +6,14 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class AuxQ3 implements Writable {
+public class valorQ3 implements Writable {
     String mercadoria;
     int qnt;
 
-    public AuxQ3(){
+    public valorQ3(){
     }
 
-    public AuxQ3(String mercadoria,int qnt) {
+    public valorQ3(String mercadoria, int qnt) {
         this.mercadoria = mercadoria;
         this.qnt = qnt;
     }
