@@ -1,7 +1,6 @@
 package basic;
 
-import java.io.IOException;
-
+import com.google.inject.internal.cglib.core.$MethodInfoTransformer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -15,8 +14,10 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.log4j.BasicConfigurator;
 
+import java.io.IOException;
 
-public class Questao1 {
+
+public class Questao7 {
 
     public static void main(String[] args) throws Exception {
         BasicConfigurator.configure();
@@ -33,24 +34,24 @@ public class Questao1 {
         Job j = new Job(c, "wordcount-professor");
 
         //cadastro das classes
-        j.setJarByClass(Questao1.class);
-        j.setMapperClass(Mapper1.class);
-        j.setCombinerClass(Combine1.class);
-        j.setReducerClass(Reducer1.class);
+        j.setJarByClass(Questao7.class);
+        j.setMapperClass(Mapper7.class);
+        //j.setReducerClass(Combine7.class);
+        j.setReducerClass(Reducer7.class);
 
         //definicao dos tipos
-        j.setOutputKeyClass(Text.class);
+        j.setOutputKeyClass(chaveQ7.class);
         j.setMapOutputValueClass(IntWritable.class);
+
 
         //definindo arquivos de entrada e saida
         FileInputFormat.addInputPath(j,input);
         FileOutputFormat.setOutputPath(j,output);
 
-
         // lanca o job e aguarda sua execucao
         System.exit(j.waitForCompletion(true) ? 0 : 1);
-    }
 
+    }
 
 
     //Classe MAP
@@ -59,7 +60,7 @@ public class Questao1 {
     //tipo de chave de saida
     //tipo de valor de saida
 
-    public static class Mapper1 extends Mapper<LongWritable, Text, Text, IntWritable> {
+    public static class Mapper7 extends Mapper<LongWritable, Text, chaveQ7, IntWritable> {
 
         // Funcao de map
         public void map(LongWritable key, Text value, Context con)
@@ -68,54 +69,43 @@ public class Questao1 {
             String linha = value.toString();
             String[] colunas = linha.split(";");      //divide cada linha em palavras
 
-            if (colunas[0].equals("Brazil")) {
-                Text outputkey = new Text(colunas[3]); //cria chave
-                    IntWritable outputValue = new IntWritable(1);   //cria valor
-                    con.write(outputkey, outputValue);
-            }
+
+                chaveQ7 outputKey = new chaveQ7(colunas[1], colunas[4]);   //cria valor
+
+                con.write(outputKey, new IntWritable(1)); // manda a chave e o valor
 
         }
     }
 
-    public static class Combine1 extends Reducer<Text, IntWritable, Text, IntWritable> {
+    public static class Combine7 extends Reducer<chaveQ7, IntWritable, chaveQ7, IntWritable> {
 
-
-        //1 parametro tipo da chave de entrada (saida do map)
-        //2 parametro : tipo de valor de entrada (saida do map)
-        //tipo de chave de saida
-        //tipo de valor de saida
-
-        // Funcao de reduce
-        public void reduce(Text word, Iterable<IntWritable> values, Context con)
+        public void reduce(chaveQ7 word, Iterable<IntWritable> values, Context con)
                 throws IOException, InterruptedException {
 
-            int sum = 0;    // soma os valores
-            for (IntWritable w:values) {
-                sum += w.get();
+            int n = 0;
+
+            for (IntWritable i:values) {
+                n += i.get();
             }
 
-            con.write(word,new IntWritable(sum)); // resultado final
+            con.write(word,new IntWritable(n)); // resultado final
         }
     }
 
-    public static class Reducer1 extends Reducer<Text, IntWritable, Text, IntWritable> {
+
+    public static class Reducer7 extends Reducer<chaveQ7, IntWritable, Text, Text> {
 
 
-        //1 parametro tipo da chave de entrada (saida do map)
-        //2 parametro : tipo de valor de entrada (saida do map)
-        //tipo de chave de saida
-        //tipo de valor de saida
-
-        // Funcao de reduce
-        public void reduce(Text word, Iterable<IntWritable> values, Context con)
+        public void reduce(chaveQ7 word, Iterable<IntWritable> values, Context con)
                 throws IOException, InterruptedException {
 
-            int sum = 0;    // soma os valores
-            for (IntWritable w:values) {
-                sum += w.get();
+            int n = 0;
+
+            for (IntWritable i:values) {
+                n += i.get();
             }
 
-            con.write(word,new IntWritable(sum)); // resultado final
+            con.write(new Text(word.getAno()+" " + word.getFluxo() ),new Text(String.valueOf(n))); // resultado final
         }
     }
 

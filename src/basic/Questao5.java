@@ -113,9 +113,6 @@ public class Questao5 {
         public void reduce(chaveQ5 word, Iterable<valorQ5> values, Context con)
                 throws IOException, InterruptedException {
 
-            System.out.println("chave");
-            System.out.println(word.ano);
-            System.out.println(word.mercadoria);
             float peso = 0;    // soma os valores
             float n = 0;
             for (valorQ5 v:values) {
