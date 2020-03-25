@@ -66,10 +66,15 @@ public class Questao3 {
 
             String linha = value.toString();
             String[] colunas = linha.split(";");      //divide cada linha em palavras
+            valorQ3 outputValue = null;
+            if (colunas[0].equals("Brazil") && colunas[1].equals("2016") && colunas[4].equals("Import")) {
+                try {
+                     outputValue = new valorQ3(colunas[3], Integer.parseInt(colunas[8]));   //cria valor
+                }
+                catch(Exception E){
+                     outputValue = new valorQ3(colunas[3], 0);   //cria valor
 
-            if (colunas[0].equals("Brazil") && colunas[1].equals("2016") && colunas[4].equals("importação")) {
-                valorQ3 outputValue = new valorQ3(colunas[2],Integer.parseInt(colunas[8]));   //cria valor
-
+                }
                 con.write((new Text("mercadoria")), outputValue);
             }
 

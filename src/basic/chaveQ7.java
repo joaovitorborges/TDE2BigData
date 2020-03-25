@@ -41,6 +41,6 @@ public class chaveQ7 implements WritableComparable<chaveQ7> {
     public int compareTo(chaveQ7 o) {
         String valor1 = this.getFluxo()+this.getAno();
         String valor2 = o.getFluxo()+o.getAno();
-        return (valor1.compareTo(valor2));
+        return (valor2.compareTo(valor1));
     }
 }

@@ -68,9 +68,17 @@ public class Questao4 {
             String linha = value.toString();
             String[] colunas = linha.split(";");      //divide cada linha em palavras
 
+            chaveQ4 outputKey = new chaveQ4(colunas[1], colunas[3]);   //cria valor
 
-            chaveQ4 outputKey = new chaveQ4(colunas[1],colunas[3]);   //cria valor
-            valorQ4 outputValue = new valorQ4(1,Float.parseFloat(colunas[6]));
+            valorQ4 outputValue;
+
+            try {
+                outputValue = new valorQ4(1,Long.parseLong(colunas[6]));
+            }catch(Exception E){
+                outputValue = new valorQ4(1,0);
+            }
+
+
 
             con.write(outputKey,outputValue); // manda a chave e o valor
 
@@ -84,16 +92,15 @@ public class Questao4 {
         public void reduce(chaveQ4 word, Iterable<valorQ4> values, Context con)
                 throws IOException, InterruptedException {
 
-            float peso = 0;    // soma os valores
-            float n = 0;
+            long peso = 0;    // soma os valores
+            int n = 0;
             for (valorQ4 v:values) {
                 peso += v.getPeso();
                 n += v.getN();
             }
 
-            peso = peso/n;
 
-            valorQ4 outputValue2 = new valorQ4((int) n,peso);
+            valorQ4 outputValue2 = new valorQ4(n,peso);
 
             con.write(word,outputValue2); // resultado final
         }
@@ -114,19 +121,16 @@ public class Questao4 {
         public void reduce(chaveQ4 word, Iterable<valorQ4> values, Context con)
                 throws IOException, InterruptedException {
 
-            System.out.println("chave");
-            System.out.println(word.ano);
-            System.out.println(word.mercadoria);
-            float peso = 0;    // soma os valores
-            float n = 0;
+            long peso = 0;    // soma os valores
+            int n = 0;
             for (valorQ4 v:values) {
                 peso += v.getPeso();
                 n += v.getN();
             }
 
-            peso = peso/n;
+            long media  = peso/n;
 
-            con.write(new Text(word.getAno()+ " " + word.getMercadoria()),new Text(String.valueOf(peso))); // resultado final
+            con.write(new Text(word.getAno()+ " " + word.getMercadoria()),new Text(String.valueOf(media))); // resultado final
         }
     }
 

@@ -42,6 +42,6 @@ public class chaveQ4 implements WritableComparable<chaveQ4> {
     public int compareTo(chaveQ4 o) {
         String valor1 = this.getMercadoria()+this.getAno();
         String valor2 = o.getMercadoria()+o.getAno();
-        return (valor1.compareTo(valor2));
+        return (valor2.compareTo(valor1));
     }
 }

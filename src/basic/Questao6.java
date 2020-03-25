@@ -65,11 +65,14 @@ public class Questao6 {
 
             String linha = value.toString();
             String[] colunas = linha.split(";");      //divide cada linha em palavras
+            valorQ6 outputValue;
 
-
-
-            valorQ6 outputValue = new valorQ6(colunas[2],Float.parseFloat(colunas[5]));
-
+            try {
+                outputValue = new valorQ6(colunas[3], Float.parseFloat(colunas[5]));
+            }
+            catch(Exception E){
+                outputValue = new valorQ6(colunas[3], 0);
+            }
             con.write(new Text(colunas[7]),outputValue); // manda a chave e o valor
 
         }
@@ -100,7 +103,7 @@ public class Questao6 {
             }
 
 
-            con.write(word,new Text(mercadoria)); // resultado final
+            con.write(word,new Text(mercadoria+"   "+ p)); // resultado final
         }
     }
 

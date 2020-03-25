@@ -69,7 +69,12 @@ public class Questao5 {
 
             if(colunas[0].equals("Brazil")){
                 chaveQ5 outputKey = new chaveQ5(colunas[1], colunas[3]);   //cria valor
-                valorQ5 outputValue = new valorQ5(1, Float.parseFloat(colunas[6]));
+                valorQ5 outputValue;
+                try {
+                    outputValue = new valorQ5(1,Long.parseLong(colunas[6]));
+                }catch(Exception E){
+                    outputValue = new valorQ5(1,0);
+                }
 
                 con.write(outputKey, outputValue); // manda a chave e o valor
             }

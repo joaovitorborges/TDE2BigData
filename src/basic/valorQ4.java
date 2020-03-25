@@ -8,12 +8,12 @@ import java.io.IOException;
 
 public class valorQ4 implements Writable {
     int n; // passamos n como 1 sempre para ajudar o reduce no processamento
-    float peso;// passamos o peso
+    long peso;// passamos o peso
 
     public valorQ4(){
     }
 
-    public valorQ4(int n, float peso) {
+    public valorQ4(int n, long peso) {
         this.n = n;
         this.peso = peso;
     }
@@ -27,7 +27,7 @@ public class valorQ4 implements Writable {
     @Override
     public void readFields(DataInput in) throws IOException {
         n = Integer.parseInt(in.readUTF());
-        peso = Float.parseFloat(in.readUTF());
+        peso = Long.parseLong(in.readUTF());
     }
 
     @Override
